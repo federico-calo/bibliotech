@@ -1,0 +1,27 @@
+{
+    "require": {
+        "guzzlehttp/guzzle": "^7.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "web/src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+        "rector/rector": "^2",
+        "phpunit/phpunit": "^11.4",
+        "squizlabs/php_codesniffer": "^3.11"
+    },
+    "scripts": {
+        "site:install": "php scripts/install.php",
+        "demo:install": "php scripts/install_demo.php",
+        "data:import": "php scripts/import_data.php",
+        "site:destroy": "php scripts/reset.php",
+        "site:reset": "php scripts/resetContent.php"
+    }
+}

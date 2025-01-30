@@ -1,0 +1,445 @@
+/* ==================== Variables globales ==================== */
+:root {
+  --color-bg: #FEFEFE;
+  --color-text: #555555;
+  --color-primary: #E9A786;
+  --color-primary-light: #FDF5F3;
+  --color-primary-hover: #EEE;
+  --color-secondary: #873D1F;
+  --color-accent: #6B3A29;
+  --color-accent-light: #FDEFE9;
+  --color-alter: #B9775D;
+  --color-border: #F8F9FA;
+  --color-footer-bg: #555555;
+  --color-footer-text: #FEFEFE;
+  --color-link-hover: #B9775D;
+}
+
+/* ==================== Font ==================== */
+
+@font-face {
+  font-family: 'orbitronblack';
+  src: url('../font/orbitron/orbitron-black-webfont.woff2') format('woff2'),
+  url('../font/orbitron/orbitron-black-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'orbitronbold';
+  src: url('../font/orbitron/orbitron-bold-webfont.woff2') format('woff2'),
+  url('../font/orbitron/orbitron-bold-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'orbitronlight';
+  src: url('../font/orbitron/orbitron-light-webfont.woff2') format('woff2'),
+  url('../font/orbitron/orbitron-light-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'orbitronmedium';
+  src: url('../font/orbitron/orbitron-medium-webfont.woff2') format('woff2'),
+  url('../font/orbitron/orbitron-medium-webfont.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* ==================== Reset & Layout ==================== */
+html, body {
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+body > .container.main-content {
+  flex: 1;
+  border: 1px solid var(--color-border);
+  border-radius: 5px;
+  background-color: var(--color-accent-light);
+}
+
+.centered {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.endpoint {
+  background-color: var(--color-primary-light);
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+pre {
+  background-color: var(--color-bg);
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1em;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.param {
+  font-weight: bold;
+}
+
+/* ==================== Typographie ==================== */
+h1, h5 {
+  margin: 0;
+}
+
+h1 {
+  font-size: 10rem;
+  color: var(--color-bg);
+  font-family: 'orbitronbold';
+}
+
+.page-error h2 {
+  font-size: 3rem;
+}
+
+.book-full h2 {
+  font-family: 'orbitronlight';
+}
+
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+  margin-bottom: 0.85rem;
+}
+
+.book-title {
+  font-size: 1.25rem;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.book-title a {
+  color: var(--color-text);
+}
+
+a:hover {
+  text-decoration: underline;
+  color: var(--color-link-hover);
+}
+
+.dropdown .dropdown-item:active {
+  background-color: var(--color-primary-hover);
+}
+
+/* ==================== Icônes ==================== */
+.col .fa-book {
+  font-size: 2.5rem;
+  color: var(--color-primary);
+}
+
+.col .fa-eye {
+  font-size: 2rem;
+}
+
+/* ==================== Couleurs personnalisées ==================== */
+.bg-custom-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-custom-secondary {
+  background-color: var(--color-secondary);
+}
+
+/* ==================== Grille & Colonnes ==================== */
+.col {
+  padding-top: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.col p {
+  margin: 0;
+}
+
+.col.book-img,
+.col.book-more {
+  justify-content: center;
+  color: var(--color-primary);
+}
+
+.main-content > .row:not(.row-first) {
+  border-top: 1px solid var(--color-primary);
+}
+
+.row-first .col {
+  color: var(--color-secondary);
+}
+
+.col.book-title a {
+  color: #444;
+}
+
+/* ==================== En-tête (Header) ==================== */
+header > .container {
+  text-align: center;
+  margin-bottom: -2.8rem;
+}
+
+header img,
+header h1 {
+  display: inline-block;
+}
+
+.banner {
+  width: 100%;
+  background: url('../images/jessica-ruscello-OQSCtabGkSY-unsplash.jpg') top / cover no-repeat;
+  opacity: 0.8;
+}
+
+.banner-footer {
+  min-height: 80px;
+}
+
+.logo {
+  text-decoration: none;
+}
+
+/* ==================== Recherche ==================== */
+.search {
+  z-index: 10;
+  position: relative;
+}
+
+.search input {
+  width: 100%;
+}
+
+.search-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.search-form input[type="text"] {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.search-form input[type="text"]:focus {
+  border-color: var(--color-primary);
+}
+
+.search-form button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border: none;
+  background-color: var(--color-primary);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-form button i {
+  font-size: 16px;
+}
+
+.search-form button:hover {
+  background-color: var(--color-secondary);
+}
+
+/* ==================== Boutons ==================== */
+.btn-custom-primary,
+.btn-custom-secondary {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+}
+
+.btn-custom-primary {
+  background: var(--color-bg);
+  color: var(--color-alter);
+}
+
+.btn-custom-primary:hover {
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+.btn-custom-secondary {
+  background: var(--color-secondary);
+  color: var(--color-bg);
+}
+
+.btn-custom-secondary:hover {
+  background: var(--color-bg);
+  color: var(--color-secondary);
+}
+
+/* ==================== Pagination ==================== */
+.page-link {
+  color: var(--color-accent);
+}
+
+.page-link:hover {
+  color: var(--color-link-hover);
+}
+
+.page-item-prev + .page-item-next {
+  margin-left: 15px;
+}
+
+.pagination {
+  margin-top: 30px;
+}
+
+/* ==================== Onglets ==================== */
+.nav-tabs.custom-tabs .nav-link {
+  color: var(--color-alter);
+  background-color: var(--color-bg);
+  border-top: 1px solid transparent;
+  border-right: 1px solid transparent;
+  border-bottom: 0;
+  border-left: 1px solid transparent;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.nav-tabs.custom-tabs .nav-link.active {
+  color: var(--color-bg);
+  background-color: var(--color-alter);
+  border: 1px solid var(--color-alter);
+}
+
+.nav-tabs.custom-tabs .nav-link:hover {
+  background-color: var(--color-alter);
+  color: var(--color-bg);
+  border: 1px solid var(--color-alter);
+}
+
+.custom-tabs {
+  border-bottom: 2px solid #D2957C;
+}
+
+/* ==================== Livres ==================== */
+.book-full .fa-book {
+  font-size: 4rem;
+}
+
+.book-full .book-img,
+.book-full .book-title {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.book-full .book-title {
+  max-width: 90%;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0;
+  margin: 0;
+}
+
+.tag-item {
+  background: var(--color-primary);
+  color: var(--color-accent);
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.4rem 0.75rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.tag-item:hover {
+  background: var(--color-secondary);
+  color: var(--color-bg);
+}
+
+/* ==================== Pied de page ==================== */
+.admin-actions {
+  display: inline-block;
+}
+
+.admin-actions form {
+  border-top: 1px solid #DDD;
+}
+
+footer {
+  background: var(--color-footer-bg);
+  padding: 1rem;
+}
+
+.footer-link {
+  color: var(--color-footer-text);
+}
+
+/* ==================== Responsive (Media Queries) ==================== */
+@media (max-width: 1024px) {
+  header h1 {
+    font-size: 7rem;
+  }
+
+  header > .container {
+    margin-bottom: -2.1rem;
+  }
+}
+
+@media (max-width: 800px) {
+  header h1 {
+    font-size: 5rem;
+  }
+
+  header > .container {
+    margin-bottom: 0;
+  }
+
+  .row-first {
+    display: none;
+  }
+
+  .row .col {
+    padding-top: 0;
+  }
+
+  .banner-footer {
+    min-height: 30px;
+  }
+}

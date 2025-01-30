@@ -1,0 +1,134 @@
+{
+  "/": {
+    "controller": "HomeController",
+    "action": "index",
+    "dependencies": [
+      "App\\Repository\\BookRepository"
+    ]
+  },
+  "/book/{id}": {
+    "controller": "BookController",
+    "action": "view",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Services\\CsrfTokenManager",
+      "App\\Services\\OpenLibraryClient"
+    ]
+  },
+  "/book/{id}/edit": {
+    "controller": "BookController",
+    "action": "edit",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Services\\CsrfTokenManager"
+    ]
+  },
+  "/book/add": {
+    "controller": "BookController",
+    "action": "edit",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Services\\CsrfTokenManager"
+    ]
+  },
+  "/book/{id}/delete": {
+    "controller": "BookController",
+    "action": "delete",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Services\\CsrfTokenManager"
+    ]
+  },
+  "/user/login": {
+    "controller": "UserController",
+    "action": "login",
+    "dependencies": [
+      "App\\Repository\\UserRepository",
+      "App\\Services\\CsrfTokenManager"
+    ]
+  },
+  "/user/register": {
+    "controller": "UserController",
+    "action": "register",
+    "dependencies": [
+      "App\\Repository\\UserRepository",
+      "App\\Services\\CsrfTokenManager"
+    ]
+  },
+  "/user/logout": {
+    "controller": "UserController",
+    "action": "logout",
+    "dependencies": [
+      "App\\Repository\\UserRepository",
+      "App\\Services\\CsrfTokenManager"
+    ]
+  },
+  "/user/{id}/edit": {
+    "controller": "UserController",
+    "action": "edit",
+    "dependencies": [
+      "App\\Repository\\UserRepository",
+      "App\\Services\\CsrfTokenManager"
+    ]
+  },
+  "/user/{id}/api": {
+    "controller": "UserController",
+    "action": "api",
+    "dependencies": [
+      "App\\Repository\\UserRepository",
+      "App\\Services\\CsrfTokenManager"
+    ]
+  },
+  "/api/book/{id}": {
+    "controller": "ApiController",
+    "action": "apiGet",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Services\\JsonResponse"
+    ]
+  },
+  "/api/books": {
+    "controller": "ApiController",
+    "action": "apiGetAll",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Services\\JsonResponse"
+    ]
+  },
+  "/api/book/add": {
+    "controller": "ApiController",
+    "action": "apiPost",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Services\\JsonResponse"
+    ]
+  },
+  "/api/token": {
+    "controller": "ApiController",
+    "action": "apiToken",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Services\\JsonResponse"
+    ]
+  },
+  "/export": {
+    "controller": "ExportController",
+    "action": "export",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Services\\CsvExporter"
+    ]
+  },
+  "/admin/dashboard": {
+    "controller": "DashboardController",
+    "action": "index",
+    "dependencies": [
+      "App\\Repository\\BookRepository",
+      "App\\Repository\\UserRepository",
+      "App\\Services\\CsvExporter",
+      "App\\Services\\CsvImporter",
+      "App\\Services\\RedisHelper"
+    ]
+  }
+}
+
