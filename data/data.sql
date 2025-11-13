@@ -1,4 +1,3 @@
-<?php
 INSERT INTO books (title, author, isbn, summary) VALUES                                                   ('PHP & MySQL: Novice to Ninja', 'Tom Butler', '9780994551011', 'A beginner-friendly guide to learning PHP and MySQL with hands-on examples.'),
     ('The Clean Coder: A Code of Conduct for Professional Programmers', 'Robert C. Martin', '9780137081073', 'A guide to the principles and practices of professional software development.'),
     ('Design Patterns: Elements of Reusable Object-Oriented Software', 'Erich Gamma', '9780201633610', 'Classic reference on design patterns in object-oriented software development.'),

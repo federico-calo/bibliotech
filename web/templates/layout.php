@@ -4,10 +4,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>bibliotech</title>
-    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
-    <link href="/assets/font/fontawesome/css/fontawesome.css" rel="stylesheet"/>
-    <link href="/assets/font/fontawesome/css/solid.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/assets/font/fontawesome/css/all.min.css">
   </head>
   <body>
     <header class="banner bg-custom-primary text-white text-center">
@@ -39,6 +38,6 @@
         </a>
       </div>
     </footer>
-    <script src="/assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>

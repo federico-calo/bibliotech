@@ -1,65 +1,170 @@
 # Bibliotech
 
-**Bibliotech** is a book management application that allows users to add, edit, delete, and view books and their associated information, such as authors, categories, and summaries.
+Bibliotech is a lightweight book management application that lets you create, edit, browse, and delete books along with their associated metadata (authors, categories, tags, summaries, etc.). Authenticated users gain access to management features.
+
+---
 
 ## Table of Contents
 1. [Features](#features)
-2. [Installation](#installation)
-3. [Configuration](#configuration)
+2. [Stack](#stack)
+3. [Quick Start (Docker)](#quick-start-docker)
+4. [Manual Installation](#manual-installation)
+5. [Configuration](#configuration)
+6. [Database & Demo Data](#database--demo-data)
+7. [Code Quality & Tests](#code-quality--tests)
+8. [Front Assets](#front-assets)
+9. [Project Structure](#project-structure)
+10. [Contributing](#contributing)
+11. [License](#license)
 
 ---
 
 ## Features
-- **Add Books**: Create a new book record by providing the title, author, ISBN, a summary, and associated tags/categories.
-- **Edit Books**: Update the existing information of a book.
-- **Delete Books**: Delete a book from the database.
-- **Browse Books**: View the details of a book, including associated categories and tags.
-- **User Authentication**: Access edit and delete features after login.
+- **Add books** with title, author, ISBN, summary, and tags.
+- **Edit and delete** existing records.
+- **Browse** detailed book listings, categories, and tags.
+- **Export / import** data via CSV helpers.
+- **User authentication** for protected actions.
 
-## Installation
+## Stack
+- PHP 8.3 (compatible with PHP ≥ 8.1)
+- MySQL 8
+- Redis 7 (for session and cache helpers)
+- Apache 2
+- Composer for dependency management
+
+## Quick Start (Docker)
+
+The Docker setup spins up PHP/Apache, MySQL, and Redis containers, and seeds the database automatically with the default schema and sample data.
+
+```bash
+make init
+```
+
+ou, manuellement :
+
+```bash
+cp settings.php.dist settings.php        # seulement la première fois
+cp env.example .env                      # adapter les ports/identifiants si besoin
+docker compose up --build -d
+```
+
+- Application: http://localhost:8080 (override avec `APP_PORT` dans `.env`)
+- MySQL: `localhost:3307` (`lamp` / `lamp`; root password `root`)
+- Redis: `localhost:6380`
+
+Useful commands:
+
+```bash
+# Scripts Composer dans le conteneur PHP
+make composer-site:install
+make composer-demo:install
+
+# Shell interactif / logs
+make shell
+make logs
+
+# Tout arrêter (et supprimer les volumes si besoin)
+docker compose down --volumes
+```
+- `composer site:install` runs `scripts/install.php`, which ensures the database schema and baseline data.
+- `composer demo:install` (optional) executes `scripts/install_demo.php` to load sample books/tags.
+- SQL fixtures live in `./data/` if you prefer importing manually (`schema.sql`, `data.sql`, `reset*.sql`).
+- Bootstrap assets are installed automatically inside the container (see [Front assets](#front-assets)).
+
+## Manual Installation
 
 ### Prerequisites
-- **PHP** version 8.1 or higher
-- **MySQL** version 8 or higher
+- PHP 8.1+
+- MySQL 8+
+- Redis 7 (optional but recommended)
+- Composer
 
-### Installation steps
+### Steps
 
-1. **Clone repository :**
-   ```bash
-   git clone https://github.com/federico-calo/bibliotech.git
-   cd bibliotech
-
-2. **Install PHP dependencies:**
-
+```bash
+git clone https://github.com/federico-calo/bibliotech.git
+cd bibliotech
+cp settings.php.dist settings.php
 composer install
+```
 
-3. **Configuration**
+Adjust `settings.php` to point to your local services (see [Configuration](#configuration)), then create the database and run:
 
-Edit the settings.php file with your database information:
+```bash
+composer site:install      # creates tables and base data
+composer demo:install      # optional: loads demo catalog
+```
 
-$settings = [];
-$settings['db'] = 'mysql:host=localhost;dbname=database_name';
-$settings['mysql_user'] = 'mysql_username';
-$settings['mysql_password'] = 'mysql_password';
+Finally, point your web server (Apache/Nginx) to the `web/` directory as the document root.
 
-4. ** Manage data **
+## Configuration
 
-Import database tables
-`composer site:install`
+All runtime options live in `settings.php`. Key entries:
 
-Optionnaly, import demo data
-`composer demo:install`
+```php
+$settings['db'] = 'mysql:host=database;dbname=lamp'; // DSN string
+$settings['mysqlUser'] = 'lamp';                     // MySQL username
+$settings['mysqlPassword'] = 'lamp';                 // MySQL password
+$settings['redisHost'] = 'cache';                    // Redis hostname
+```
 
-5. **Clean and test code**
+- For Docker, the defaults match the compose services (`database`, `cache`, `lamp` credentials).
+- For a local setup, update the DSN and credentials accordingly.
+- To enable debug mode, set `$settings['debug'] = true;`.
 
-Clean up the code with rector and phpcs
-`vendor/bin/rector process web --dry-run`
-`vendor/bin/rector process web`
-`vendor/bin/phpcs web`
-`vendor/bin/phpcbf web`
+## Database & Demo Data
+- `composer site:install` runs `scripts/install.php`, which ensures the database schema and baseline data.
+- `composer demo:install` (optional) executes `scripts/install_demo.php` to load sample books/tags.
+- SQL fixtures live in `./data/` if you prefer importing manually (`schema.sql`, `data.sql`, `reset*.sql`).
 
-Check standards with PHPStan
-`vendor/bin/phpstan web analysis`
+## Code Quality & Tests
 
-Test with PHPUnit
-`vendor/bin/phpunit --color`
+```bash
+# Static analysis and formatting
+vendor/bin/rector process web --dry-run
+vendor/bin/rector process web
+vendor/bin/phpcs web
+vendor/bin/phpcbf web
+
+# Static analysis (correct command syntax)
+vendor/bin/phpstan analyse web
+
+# Unit tests
+vendor/bin/phpunit --color
+```
+
+Via Docker : `make rector`, `make lint`, `make phpstan`, `make phpunit` (ou `docker compose exec app <commande>`).
+
+## Front assets
+
+- Au premier démarrage, le conteneur installe `twbs/bootstrap` via Composer si besoin (ce qui mettra à jour `composer.json` / `composer.lock`) et copie automatiquement `bootstrap.min.css` et `bootstrap.bundle.min.js` dans `web/assets/`.
+- Font Awesome (version configurable via `FONT_AWESOME_VERSION`) est téléchargé depuis GitHub, avec ses CSS/WEBFONTS copiés dans `web/assets/font/fontawesome`. Le layout charge `/assets/font/fontawesome/css/all.min.css`, ce qui rend les icônes immédiatement disponibles offline.
+- Les feuilles de style/JS pointent sur `/assets/...` afin que Bootstrap et Font Awesome soient disponibles immédiatement, quelle que soit la profondeur de la vue rendue.
+- Pour forcer une mise à jour :
+
+```bash
+docker compose exec app composer require twbs/bootstrap:^5.3
+docker compose exec app cp vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js web/assets/js/bootstrap.bundle.min.js
+docker compose exec app cp vendor/twbs/bootstrap/dist/css/bootstrap.min.css web/assets/css/bootstrap.min.css
+```
+
+- Pour rafraîchir Font Awesome, supprime le dossier `web/assets/font/fontawesome` puis redémarre le conteneur (`docker compose restart app`).
+
+## Project Structure
+
+```
+web/                # Application entrypoint, controllers, entities, templates
+scripts/            # CLI helpers (install, reset, import)
+data/               # SQL fixtures and CSV imports
+docker/             # Docker build assets
+```
+
+## Contributing
+1. Fork the repository and create a feature branch.
+2. Run linters/tests before submitting a PR.
+3. Describe your changes clearly and link related issues.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for details.
