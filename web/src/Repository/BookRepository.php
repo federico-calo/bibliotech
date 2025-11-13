@@ -208,7 +208,11 @@ class BookRepository implements BookRepositoryInterface
         $cacheKey = 'books:get:' . md5((string) $bookId);
         $book = $this->redisHelper->get($cacheKey);
         if (empty($book)) {
-            $book = $this->findById($bookId)->toArray();
+            $bookEntity = $this->findById((int) $bookId);
+            if ($bookEntity === null) {
+                return [];
+            }
+            $book = $bookEntity->toArray();
             $tags = $this->findTagsByBookId($bookId);
             foreach ($tags as $tag) {
                 $book['tags'][] = $tag->getName();
@@ -274,6 +278,8 @@ class BookRepository implements BookRepositoryInterface
                 $bookId = $this->pdo->lastInsertId();
                 $this->addTags($bookId, $tags);
                 $this->message->setMessage('Livre ajouté avec succès !', 'success');
+                $this->redisHelper->clearCacheFromPattern('books:list:*');
+                $this->redisHelper->clearCache('books:get:' . md5((string) $bookId));
             }
             return $bookId ?? null;
 
@@ -321,6 +327,7 @@ class BookRepository implements BookRepositoryInterface
                 $this->addTags($bookId, $tags);
                 $this->message->setMessage('Livre mis à jour avec succès !', 'success');
                 $this->redisHelper->clearCache('books:get:' . md5((string) $bookId));
+                $this->redisHelper->clearCacheFromPattern('books:list:*');
             }
             return;
 
@@ -338,7 +345,7 @@ class BookRepository implements BookRepositoryInterface
     #[\Override]
     public function deleteBook(array $bookData): void
     {
-        $bookId = $bookData['id'] ?? '';
+        $bookId = $bookData['id'] ?? $bookData['book_id'] ?? '';
         try {
             $this->pdo->beginTransaction();
             $stmt = $this->pdo->prepare("DELETE FROM book_tags WHERE book_id = :book_id");
@@ -347,6 +354,8 @@ class BookRepository implements BookRepositoryInterface
             $stmt->execute([':book_id' => $bookId]);
             $this->pdo->commit();
             $this->message->setMessage('Livre supprimé avec succès !', 'success');
+            $this->redisHelper->clearCache('books:get:' . md5((string) $bookId));
+            $this->redisHelper->clearCacheFromPattern('books:list:*');
             header("Location: /");
 
             exit;

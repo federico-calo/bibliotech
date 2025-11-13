@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Core\AuthManager;
+use App\Core\Routing\Router;
 use App\Core\Settings;
 use App\Core\View;
 use App\Repository\BookRepository;
@@ -58,12 +59,16 @@ class BookController
             throw new \Exception("Template non trouvé : " . $templatePath);
         }
         $id = $params['id'] ?? null;
-        if ($params !== null && $method == 'POST') {
+        if ($method === 'POST') {
             $token = $params['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-            if (!empty($id) && $this->csrfTokenManager->validateToken($token)) {
-                $this->bookRepository->updateBook($params);
+            if ($this->csrfTokenManager === null || !$this->csrfTokenManager->validateToken((string) $token)) {
+                Router::accessDenied();
             }
-            else {
+            $bookId = $params['book_id'] ?? $id;
+            if (!empty($bookId)) {
+                $params['id'] = $bookId;
+                $this->bookRepository->updateBook($params);
+            } else {
                 $this->bookRepository->insertBook($params);
             }
             header("Location: /");
@@ -94,8 +99,14 @@ class BookController
             throw new \Exception("Template non trouvé : " . $templatePath);
         }
         $id = $params['id'] ?? null;
-        if ($params !== null && $method == 'POST') {
-            if (!empty($id)) {
+        if ($method === 'POST') {
+            $token = $params['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+            if ($this->csrfTokenManager === null || !$this->csrfTokenManager->validateToken((string) $token)) {
+                Router::accessDenied();
+            }
+            $bookId = $params['book_id'] ?? $id;
+            if (!empty($bookId)) {
+                $params['id'] = $bookId;
                 $this->bookRepository->deleteBook($params);
             }
             header("Location: /");

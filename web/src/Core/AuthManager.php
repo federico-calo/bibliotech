@@ -37,11 +37,11 @@ class AuthManager
      */
     public function registerUser(string $login, string $password, string $role = UserRole::DEFAULT->value): void
     {
-        if (empty($login) || empty($password)) {
+        $login = trim($login);
+        if ($login === '' || $password === '') {
             throw new \Exception('Le login et le mot de passe ne peuvent pas être vides.');
         }
-        $login = strip_tags($login);
-        $hashedPassword = password_hash(strip_tags($password), PASSWORD_ARGON2ID);
+        $hashedPassword = password_hash($password, PASSWORD_ARGON2ID);
         $stmt = $this->pdo->prepare("INSERT INTO users (login, password, role) VALUES (:login, :password, :role)");
         $stmt->bindParam(':login', $login);
         $stmt->bindParam(':password', $hashedPassword);
@@ -85,12 +85,12 @@ class AuthManager
 
         try {
             $userId = $userData['id'] ?? null;
-            $firstname = strip_tags((string) $userData['firstname']) ?? null;
-            $lastname = strip_tags((string) $userData['lastname']) ?? null;
-            $role = strip_tags((string) $userData['role']) ?? null;
-            $mail = strip_tags((string) $userData['mail']) ?? '';
-            $login = strip_tags((string) $userData['login']) ?? '';
-            $password = password_hash((string) strip_tags((string) $userData['pwd']), PASSWORD_BCRYPT);
+            $firstname = strip_tags((string) ($userData['firstname'] ?? '')) ?: null;
+            $lastname = strip_tags((string) ($userData['lastname'] ?? '')) ?: null;
+            $role = strip_tags((string) ($userData['role'] ?? '')) ?: null;
+            $mail = strip_tags((string) ($userData['mail'] ?? '')) ?: '';
+            $login = trim((string) ($userData['login'] ?? ''));
+            $password = password_hash((string) $userData['pwd'], PASSWORD_ARGON2ID);
             if ($userId !== null) {
                 $stmt = $this->pdo->prepare(
                     "

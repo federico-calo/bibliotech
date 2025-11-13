@@ -39,6 +39,10 @@ class UserController
             throw new \Exception("Template non trouvé : " . $templatePath);
         }
         if (isset($params['login']) && isset($params['pwd'])) {
+            $token = $params['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+            if (!$this->csrfTokenManager->validateToken((string) $token)) {
+                Router::accessDenied();
+            }
             $this->authManager->loginUser($params['login'], $params['pwd']);
             header("Location: /");
             exit;
@@ -59,6 +63,10 @@ class UserController
             throw new \Exception("Template non trouvé : " . $templatePath);
         }
         if (isset($params['login']) && isset($params['pwd'])) {
+            $token = $params['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+            if (!$this->csrfTokenManager->validateToken((string) $token)) {
+                Router::accessDenied();
+            }
             $this->authManager->registerUser($params['login'], $params['pwd']);
             header("Location: /");
             exit;
@@ -130,7 +138,10 @@ class UserController
         $id = $params['id'] ?? null;
         if ($params !== null && $method == 'POST') {
             $token = $params['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
-            if (!empty($id) && $this->csrfTokenManager->validate($token)) {
+            if (!empty($id)) {
+                if (!$this->csrfTokenManager->validateToken((string) $token)) {
+                    Router::accessDenied();
+                }
                 try {
                     $manager = $this->authManager->getRefreshTokenManager(Settings::get('hashKey'));
                     $manager->assignToken($currentUser['id']);

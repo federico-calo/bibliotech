@@ -6,6 +6,7 @@
     </label>
     <input value="<?php echo $book['id'] ?? '' ?>" type="hidden" name="book_id">
     <input value="book_delete" type="hidden" name="op">
+    <input value="<?php echo $csrfToken ?? '' ?>" type="hidden" name="csrf_token">
   </div>
   <button type="submit" class="btn btn-primary mt-3">Supprimer</button>
   <a href="/book/<?php echo $book['id'] ?? '' ?>"
