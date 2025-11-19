@@ -7,7 +7,9 @@ use PHPUnit\Framework\TestCase;
 
 class JsonResponseTest extends TestCase
 {
-
+    /**
+     * @return void
+     */
     public function testJsonResponseWithDefaultStatusCode(): void
     {
         $data = ['message' => 'success'];
@@ -16,6 +18,9 @@ class JsonResponseTest extends TestCase
         $this->assertSame(json_encode($data), $result, 'La sortie JSON doit correspondre aux données encodées');
     }
 
+    /**
+     * @return void
+     */
     public function testJsonResponseWithCustomStatusCode(): void
     {
         $data = ['error' => 'not found'];

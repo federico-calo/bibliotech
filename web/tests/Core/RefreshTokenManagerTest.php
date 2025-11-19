@@ -121,5 +121,4 @@ class RefreshTokenManagerTest extends TestCase
         $result = $this->tokenManager->validateToken($hashedToken, $userId);
         $this->assertFalse($result, 'Le token doit être invalide car expiré.');
     }
-
 }

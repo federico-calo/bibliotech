@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class MessageTest extends TestCase
 {
-
     /**
      * @return void
      */
@@ -66,5 +65,4 @@ class MessageTest extends TestCase
         $this->assertSame('', $result['messageText']);
         $this->assertSame('', $result['messageType']);
     }
-
 }
