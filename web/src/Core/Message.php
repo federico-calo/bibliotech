@@ -4,7 +4,6 @@ namespace App\Core;
 
 class Message
 {
-
     /**
      * @return array
      */
@@ -31,5 +30,4 @@ class Message
     {
         $_SESSION['message'] = ['messageText' => $messageText, 'messageType' => $messageType];
     }
-
 }

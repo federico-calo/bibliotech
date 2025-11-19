@@ -9,8 +9,15 @@ use PDO;
 
 class UserRepository implements UserRepositoryInterface
 {
+    /**
+     * @var PDO
+     */
     private readonly \PDO $pdo;
 
+    /**
+     * @param Database $Database
+     * @param Message  $message
+     */
     public function __construct(
         private readonly Database $Database,
         private readonly Message $message
@@ -19,7 +26,9 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @param  int    $page
+     * @param  string $search
+     * @return array
      */
     public function findAll(int $page, string $search): array
     {
@@ -42,7 +51,8 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @param  int $id
+     * @return User|null
      */
     public function findById(int $id): ?User
     {
@@ -56,7 +66,8 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @param  int $id
+     * @return void
      */
     public function delete(int $id): void
     {
@@ -68,7 +79,6 @@ class UserRepository implements UserRepositoryInterface
             $this->message->setMessage(self::ENTITY_NAME . ' supprimé avec succès !', 'success');
             header("Location: /");
             exit;
-
         } catch (\PDOException $e) {
             $this->pdo->rollBack();
             $this->message->setMessage($e->getMessage(), 'danger');
@@ -77,7 +87,8 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @param  string $search
+     * @return int
      */
     public function countAll(string $search = ''): int
     {
@@ -98,7 +109,7 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * @return false|array
      */
     public function currentUser(): false|array
     {
@@ -109,5 +120,4 @@ class UserRepository implements UserRepositoryInterface
 
         return $result === false ? [] : $result ;
     }
-
 }

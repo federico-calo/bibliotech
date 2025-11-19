@@ -6,7 +6,6 @@ use App\Core\Routing\Route;
 
 class ClassResolver
 {
-
     /**
      * @throws \ReflectionException
      */
@@ -16,7 +15,6 @@ class ClassResolver
         $controllerFullClass = "App\\Controller\\" . $route->getController();
         return $this->resolveController($controllerFullClass, $services);
     }
-
 
     /**
      * @throws \ReflectionException
@@ -94,5 +92,4 @@ class ClassResolver
 
         return $reflectionClass->newInstanceArgs($resolvedDependencies);
     }
-
 }

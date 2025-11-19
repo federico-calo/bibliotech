@@ -44,7 +44,7 @@
     <?php if (isset($book['id'])) : ?>
       <input value="<?php echo $book['id'] ?>" type="hidden" name="book_id">
       <input value="book_update" type="hidden" name="op">
-    <?php else: ?>
+    <?php else : ?>
       <input value="book_insert" type="hidden" name="op">
     <?php endif; ?>
 

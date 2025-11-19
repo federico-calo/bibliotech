@@ -4,7 +4,6 @@ namespace App\Core;
 
 class ErrorHandler
 {
-
     /**
      * @throws \Exception
      */
@@ -61,7 +60,8 @@ class ErrorHandler
 
         http_response_code(500);
         View::render(
-            'errors/500', [
+            'errors/500',
+            [
             'errorMessage' => $errorMessage,
             'trace' => $trace,
             'isDebug' => $isDebug
@@ -71,6 +71,10 @@ class ErrorHandler
     }
 
 
+    /**
+     * @param  \Throwable $exception
+     * @return void
+     */
     private static function logError(\Throwable $exception): void
     {
         $logMessage = static::formatErrorMessage(
@@ -80,12 +84,25 @@ class ErrorHandler
         error_log($logMessage, 3, __DIR__ . '/../../../logs/error.log');
     }
 
+    /**
+     * @param  $level
+     * @param  $message
+     * @param  $file
+     * @param  $line
+     * @return void
+     * @throws \Exception
+     */
     public static function handleError($level, $message, $file, $line)
     {
         $exception = new \ErrorException($message, 0, $level, $file, $line);
         self::handleException($exception);
     }
 
+    /**
+     * @param  \Throwable $exception
+     * @param  string     $format
+     * @return string
+     */
     private static function formatErrorMessage(\Throwable $exception, string $format): string
     {
         return sprintf(

@@ -37,7 +37,7 @@
       </div>
 
       <div class="col-md-6 col-12 mb-3">
-          <?php if(isset($monthlyBooks)) : ?>
+          <?php if (isset($monthlyBooks)) : ?>
             <div class="mt-3">
               <h3>Statistiques mensuelles</h3>
               <table>
@@ -45,7 +45,7 @@
                 <th>Mois</th>
                 <th>Publications</th>
                 </thead>
-                  <?php foreach(($monthlyBooks) as $monthlyBook): ?>
+                  <?php foreach (($monthlyBooks) as $monthlyBook) : ?>
                     <tr>
                       <td><p><?php echo $monthlyBook['publicationMonth'] ?></p></td>
                       <td class="text-center"><p><?php echo $monthlyBook['bookCount'] ?? 0 ?></p></td>

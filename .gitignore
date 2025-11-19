@@ -52,3 +52,5 @@ Thumbs.db
 
 fontawesome
 bootstrap
+
+.phpunit.result.cache

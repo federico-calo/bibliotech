@@ -41,7 +41,7 @@ The Docker setup spins up PHP/Apache, MySQL, and Redis containers, and seeds the
 make init
 ```
 
-ou, manuellement :
+or, manually
 
 ```bash
 cp settings.php.dist settings.php        # seulement la première fois
@@ -138,10 +138,10 @@ Via Docker : `make rector`, `make lint`, `make phpstan`, `make phpunit` (ou `do
 
 ## Front assets
 
-- Au premier démarrage, le conteneur installe `twbs/bootstrap` via Composer si besoin (ce qui mettra à jour `composer.json` / `composer.lock`) et copie automatiquement `bootstrap.min.css` et `bootstrap.bundle.min.js` dans `web/assets/`.
-- Font Awesome (version configurable via `FONT_AWESOME_VERSION`) est téléchargé depuis GitHub, avec ses CSS/WEBFONTS copiés dans `web/assets/font/fontawesome`. Le layout charge `/assets/font/fontawesome/css/all.min.css`, ce qui rend les icônes immédiatement disponibles offline.
-- Les feuilles de style/JS pointent sur `/assets/...` afin que Bootstrap et Font Awesome soient disponibles immédiatement, quelle que soit la profondeur de la vue rendue.
-- Pour forcer une mise à jour :
+- On first startup, the container installs twbs/bootstrap via Composer if needed (which updates composer.json/composer.lock) and automatically copies bootstrap.min.css and bootstrap.bundle.min.js to web/assets/.
+- Font Awesome (version configurable via FONT_AWESOME_VERSION) is downloaded from GitHub, with its CSS/WEBFONTS copied to web/assets/font/fontawesome. The layout loads /assets/font/fontawesome/css/all.min.css, making icons immediately available offline.
+- The style sheets/JS point to /assets/... so that Bootstrap and Font Awesome are immediately available, regardless of the depth of the rendered view.
+- To force an update:
 
 ```bash
 docker compose exec app composer require twbs/bootstrap:^5.3
@@ -149,7 +149,7 @@ docker compose exec app cp vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js
 docker compose exec app cp vendor/twbs/bootstrap/dist/css/bootstrap.min.css web/assets/css/bootstrap.min.css
 ```
 
-- Pour rafraîchir Font Awesome, supprime le dossier `web/assets/font/fontawesome` puis redémarre le conteneur (`docker compose restart app`).
+- To refresh Font Awesome, delete the `web/assets/font/fontawesome` directory and then restart the container (`docker compose restart app`).
 
 ## Project Structure
 

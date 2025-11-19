@@ -7,6 +7,11 @@ use App\Core\ClassResolver;
 
 class RouterManager
 {
+    /**
+     * @param Router        $router
+     * @param ClassResolver $classResolver
+     * @param AuthManager   $authManager
+     */
     public function __construct(
         private Router $router,
         private ClassResolver $classResolver,
@@ -14,6 +19,12 @@ class RouterManager
     ) {
     }
 
+    /**
+     * @param  string $path
+     * @param  array  $input
+     * @return void
+     * @throws \ReflectionException
+     */
     public function handle(string $path, array $input): void
     {
         $route = $this->router->match($path, $input) ?? $this->router->notFound();

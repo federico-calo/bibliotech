@@ -1,10 +1,10 @@
 <?php
 
-
 namespace App\Services;
 
 use App\Core\Settings;
 use Redis;
+
 class RedisHelper
 {
     private Redis $redis;
@@ -72,5 +72,4 @@ class RedisHelper
             }
         } while ($iterator != 0);
     }
-
 }

@@ -4,10 +4,12 @@ namespace App\Enum;
 
 enum UserRole: string
 {
-
     case DEFAULT = 'member';
     case ADMIN = 'administrator';
 
+    /**
+     * @return string
+     */
     public function getDescription(): string
     {
         return match ($this) {
@@ -15,5 +17,4 @@ enum UserRole: string
             self::ADMIN => 'This is the administrator role.',
         };
     }
-
 }

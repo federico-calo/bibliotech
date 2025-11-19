@@ -13,7 +13,6 @@ use GuzzleHttp\Client;
 
 final class App
 {
-
     protected static Settings $settings;
 
     /**
@@ -66,6 +65,9 @@ final class App
         $this->routerManager->handle($requestPath, $input);
     }
 
+    /**
+     * @return void
+     */
     private function refreshAuth(): void
     {
         if (!empty(AuthCookie::getAuthenticatedUserId()) && !AuthManager::isLoggedIn()) {
@@ -77,5 +79,4 @@ final class App
             }
         }
     }
-
 }

@@ -12,17 +12,22 @@ use App\Services\CsrfTokenManager;
 
 class UserController
 {
+    public const string REGISTER_TEMPLATE_NAME = 'user/user-register';
 
-    const string REGISTER_TEMPLATE_NAME = 'user/user-register';
+    public const string LOGIN_TEMPLATE_NAME = 'user/user-login';
 
-    const string LOGIN_TEMPLATE_NAME = 'user/user-login';
+    public const string EDIT_TEMPLATE_NAME = 'user/user-edit';
 
-    const string EDIT_TEMPLATE_NAME = 'user/user-edit';
+    public const string API_TEMPLATE_NAME = 'user/user-api';
 
-    const string API_TEMPLATE_NAME = 'user/user-api';
-
+    /**
+     * @param AuthManager      $authManager
+     * @param UserRepository   $userRepository
+     * @param View             $view
+     * @param CsrfTokenManager $csrfTokenManager
+     */
     public function __construct(
-        private AuthManager    $authManager,
+        private AuthManager $authManager,
         private UserRepository $userRepository,
         private View $view,
         private CsrfTokenManager $csrfTokenManager,
@@ -30,6 +35,8 @@ class UserController
     }
 
     /**
+     * @param $params
+     * @return void
      * @throws \Exception
      */
     public function login($params): void
@@ -54,6 +61,8 @@ class UserController
     }
 
     /**
+     * @param $params
+     * @return void
      * @throws \Exception
      */
     public function register($params): void
@@ -81,7 +90,9 @@ class UserController
     }
 
     /**
-     * @throws \Random\RandomException
+     * @param $params
+     * @param $method
+     * @return void
      * @throws \Exception
      */
     public function edit($params, $method): void
@@ -121,7 +132,9 @@ class UserController
     }
 
     /**
-     * @throws \Random\RandomException
+     * @param $params
+     * @param $method
+     * @return void
      * @throws \Exception
      */
     public function api($params, $method): void
@@ -165,11 +178,12 @@ class UserController
         );
     }
 
-
+    /**
+     * @return void
+     */
     public function logout(): void
     {
         $this->authManager->logout();
         \header("Location: /");
     }
-
 }

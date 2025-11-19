@@ -20,18 +20,29 @@ class Database
         }
 
         $this->pdo = new \PDO(
-            $dbConnectionString, $mysqlUser, $mysqlPassword, [
+            $dbConnectionString,
+            $mysqlUser,
+            $mysqlPassword,
+            [
                 \PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION,
                 \PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
             ]
         );
     }
 
+    /**
+     * @return \PDO
+     */
     public function getConnection(): \PDO
     {
         return $this->pdo;
     }
 
+    /**
+     * @param  string $sql
+     * @param  array  $params
+     * @return \PDOStatement
+     */
     public function query(string $sql, array $params = []): \PDOStatement
     {
         $stmt = $this->pdo->prepare($sql);
@@ -39,5 +50,4 @@ class Database
 
         return $stmt;
     }
-
 }

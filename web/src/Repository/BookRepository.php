@@ -12,7 +12,6 @@ use PDO;
 
 class BookRepository implements BookRepositoryInterface
 {
-
     public const int BOOKS_PER_PAGE = 10;
 
     /**
@@ -33,8 +32,12 @@ class BookRepository implements BookRepositoryInterface
     ) {
         $this->pdo = $Database->getConnection();
     }
+
     /**
-     * @inheritdoc
+     * @param  int    $page
+     * @param  int    $itemsPerPage
+     * @param  string $search
+     * @return array
      */
     #[\Override]
     public function findAll(int $page, int $itemsPerPage, string $search): array
@@ -61,7 +64,8 @@ class BookRepository implements BookRepositoryInterface
 
 
     /**
-     * @inheritdoc
+     * @param  int $id
+     * @return Book|null
      */
     #[\Override]
     public function findById(int $id): ?Book
@@ -105,7 +109,8 @@ class BookRepository implements BookRepositoryInterface
 
 
     /**
-     * @inheritdoc
+     * @param  int $bookId
+     * @return array
      */
     #[\Override]
     public function findTagsByBookId(int $bookId): array
@@ -141,8 +146,7 @@ class BookRepository implements BookRepositoryInterface
             if (!empty($tagName)) {
                 $booksEntities = $this->findByTagName($tagName, $page, $itemsPerPage);
                 $totalBooks = $this->countAllByTagName($tagName);
-            }
-            else {
+            } else {
                 $booksEntities = $this->findAll($page, $itemsPerPage, $search);
                 $totalBooks = $this->countAll($search);
             }
@@ -172,6 +176,10 @@ class BookRepository implements BookRepositoryInterface
         return $booksList;
     }
 
+    /**
+     * @param  array $bookIds
+     * @return array
+     */
     public function findTagsByBookIds(array $bookIds): array
     {
         if (empty($bookIds)) {
@@ -225,7 +233,7 @@ class BookRepository implements BookRepositoryInterface
     }
 
     /**
-     * @param \App\Entity\Book $book
+     * @param Book $book
      *
      * @return void
      */
@@ -234,8 +242,7 @@ class BookRepository implements BookRepositoryInterface
     {
         if ($book->getId() === null) {
             $this->insertBook($book);
-        }
-        else {
+        } else {
             $this->updateBook($book);
         }
         $this->redisHelper->clearCacheFromPattern('books:list:*');
@@ -282,7 +289,6 @@ class BookRepository implements BookRepositoryInterface
                 $this->redisHelper->clearCache('books:get:' . md5((string) $bookId));
             }
             return $bookId ?? null;
-
         } catch (\PDOException $e) {
             $this->message->setMessage('Erreur : ' . $e->getMessage(), 'danger');
             return null;
@@ -330,7 +336,6 @@ class BookRepository implements BookRepositoryInterface
                 $this->redisHelper->clearCacheFromPattern('books:list:*');
             }
             return;
-
         } catch (\PDOException $e) {
             $this->message->setMessage('Erreur : ' . $e->getMessage(), 'danger');
             return;
@@ -359,7 +364,6 @@ class BookRepository implements BookRepositoryInterface
             header("Location: /");
 
             exit;
-
         } catch (\PDOException $e) {
             $this->pdo->rollBack();
             $this->message->setMessage($e->getMessage(), 'danger');
@@ -425,7 +429,11 @@ class BookRepository implements BookRepositoryInterface
         return (int) $result['total'];
     }
 
-
+    /**
+     * @param  string $tagName
+     * @param  string $search
+     * @return int
+     */
     public function countAllByTagName(string $tagName = '', string $search = ''): int
     {
         $query = 'SELECT COUNT(*) AS total 
@@ -447,7 +455,6 @@ class BookRepository implements BookRepositoryInterface
         return (int) $result['total'];
     }
 
-
     /**
      * @param int    $page
      * @param int    $totalItems
@@ -465,10 +472,10 @@ class BookRepository implements BookRepositoryInterface
         string $search,
         string $tag
     ): array {
-        $nbPages = $totalItems/$itemsPerPage;
+        $nbPages = $totalItems / $itemsPerPage;
         $pagination = [];
         if ($page > 1) {
-            $pagination['prev'] = '?page=' . $page-1;
+            $pagination['prev'] = '?page=' . $page - 1;
             if (!empty($search)) {
                 $pagination['prev'] .= '&search=' . $search;
             }
@@ -477,7 +484,7 @@ class BookRepository implements BookRepositoryInterface
             }
         }
         if ($page < $nbPages) {
-            $pagination['next'] = '?page=' . $page+1;
+            $pagination['next'] = '?page=' . $page + 1;
             if (!empty($search)) {
                 $pagination['next'] .= '&search=' . $search;
             }
@@ -489,6 +496,9 @@ class BookRepository implements BookRepositoryInterface
         return $pagination;
     }
 
+    /**
+     * @return array
+     */
     public function getMonthlyBooks()
     {
         $this->pdo->setAttribute(
@@ -513,5 +523,4 @@ class BookRepository implements BookRepositoryInterface
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
-
 }

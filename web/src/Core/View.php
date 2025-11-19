@@ -4,7 +4,6 @@ namespace App\Core;
 
 class View
 {
-
     private const string PAGE_TEMPLATE_NAME = 'layout';
 
     /**
@@ -28,6 +27,11 @@ class View
         include $pageTemplate;
     }
 
+    /**
+     * @param  string $template
+     * @param  array  $variables
+     * @return string
+     */
     protected static function renderTemplate(string $template, array $variables): string
     {
         extract($variables);
@@ -35,5 +39,4 @@ class View
         include $template;
         return ob_get_clean();
     }
-
 }

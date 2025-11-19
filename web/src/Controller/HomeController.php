@@ -9,17 +9,23 @@ use App\Repository\BookRepository;
 
 class HomeController
 {
-
+    /**
+     * @param AuthManager    $authManager
+     * @param BookRepository $bookRepository
+     * @param View           $view
+     */
     public function __construct(
-        private AuthManager    $authManager,
+        private AuthManager $authManager,
         private BookRepository $bookRepository,
         private View $view,
     ) {
     }
-    
-    const string TEMPLATE_NAME = 'book/books-list';
+
+    public const string TEMPLATE_NAME = 'book/books-list';
 
     /**
+     * @param  $params
+     * @return void
      * @throws \Exception
      */
     public function index($params): void
@@ -29,8 +35,7 @@ class HomeController
             $totalBooks = $this->bookRepository->countAllByTagName(
                 tagName: $params['tag']
             );
-        }
-        else {
+        } else {
             $totalBooks = $this->bookRepository->countAll(
                 search: $params['search'] ?? ''
             );
@@ -60,5 +65,4 @@ class HomeController
             ],
         );
     }
-
 }

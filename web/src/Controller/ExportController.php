@@ -10,7 +10,12 @@ use App\Services\CsvExporter;
 
 class ExportController
 {
-
+    /**
+     * @param AuthManager    $authManager
+     * @param View           $view
+     * @param BookRepository $bookRepository
+     * @param CsvExporter    $csvExporter
+     */
     public function __construct(
         private AuthManager $authManager,
         private View $view,
@@ -19,7 +24,12 @@ class ExportController
     ) {
     }
 
-    public function export($params)
+    /**
+     * @param  $params
+     * @return void
+     * @throws \Exception
+     */
+    public function export($params): void
     {
         if (!$this->authManager->isAdmin()) {
             Router::accessDenied();
@@ -30,5 +40,4 @@ class ExportController
         $books = $booksData['books'];
         $this->csvExporter->export($books, 'books.csv');
     }
-
 }

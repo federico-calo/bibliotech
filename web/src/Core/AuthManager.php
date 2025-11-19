@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Core;
 
 use App\Enum\UserRole;
@@ -12,6 +13,11 @@ class AuthManager
     public function __construct(Database $database, private readonly Message $message)
     {
         $this->pdo = $database->getConnection();
+        if (isset($_SESSION['__logout_message'])) {
+            [$text, $type] = $_SESSION['__logout_message'];
+            $this->message->setMessage($text, $type);
+            unset($_SESSION['__logout_message']);
+        }
     }
 
     public static function isLoggedIn(): bool
@@ -29,7 +35,7 @@ class AuthManager
         session_unset();
         session_destroy();
         AuthCookie::clearAuthCookie();
-        Message::setMessage('Déconnecté !', 'success');
+        $_SESSION['__logout_message'] = ['Déconnecté !', 'success'];
     }
 
     /**
@@ -82,7 +88,6 @@ class AuthManager
         if (empty($userData['login']) || empty($userData['pwd'])) {
             throw new \Exception('Le login, le mot de passe et le mail ne peuvent pas être vides.');
         }
-
         try {
             $userId = $userData['id'] ?? null;
             $firstname = strip_tags((string) ($userData['firstname'] ?? '')) ?: null;
@@ -105,7 +110,6 @@ class AuthManager
                 WHERE id = :id
             "
                 );
-
                 $stmt->execute(
                     [
                     ':firstname' => $firstname,
@@ -117,7 +121,6 @@ class AuthManager
                     ':id' => $userId,
                     ]
                 );
-
                 $this->message->setMessage('Utilisateur mis à jour avec succès !', 'success');
             } else {
                 throw new \Exception('ID utilisateur manquant.');
@@ -131,5 +134,4 @@ class AuthManager
     {
         return new RefreshTokenManager($this->pdo, $secretKey);
     }
-
 }

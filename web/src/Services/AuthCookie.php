@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Core\App;
 use App\Core\Settings;
 
 class AuthCookie
@@ -22,12 +21,19 @@ class AuthCookie
         ];
         $data = base64_encode(json_encode($payload));
         $signature = hash_hmac(
-            'sha256', $data, (string) Settings::get('hashKey')
+            'sha256',
+            $data,
+            (string) Settings::get('hashKey')
         );
 
         return $data . '.' . $signature;
     }
 
+    /**
+     * @param  string $token
+     * @return int|null
+     * @throws \Exception
+     */
     public static function validateToken(string $token): ?int
     {
         [$data, $signature] = explode('.', $token) + [null, null];
@@ -35,7 +41,9 @@ class AuthCookie
             return null;
         }
         $expectedSignature = hash_hmac(
-            'sha256', $data, (string) Settings::get('hashKey')
+            'sha256',
+            $data,
+            (string) Settings::get('hashKey')
         );
         if (!hash_equals($expectedSignature, $signature)) {
             return null;
@@ -67,10 +75,15 @@ class AuthCookie
         );
     }
 
+    /**
+     * @return void
+     */
     public static function clearAuthCookie(): void
     {
         setcookie(
-            self::COOKIE_NAME, '', [
+            self::COOKIE_NAME,
+            '',
+            [
             'expires' => time() - 3600,
             'path' => '/',
             'secure' => true,
@@ -80,10 +93,13 @@ class AuthCookie
         );
     }
 
+    /**
+     * @return int|null
+     * @throws \Exception
+     */
     public static function getAuthenticatedUserId(): ?int
     {
         $token = $_COOKIE[self::COOKIE_NAME] ?? null;
         return $token ? self::validateToken($token) : null;
     }
-
 }

@@ -7,13 +7,19 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class OpenLibraryClient
 {
-
     private const string BASE_API_URL = 'https://openlibrary.org/api/books';
 
+    /**
+     * @param Client $httpClient
+     */
     public function __construct(private readonly Client $httpClient)
     {
     }
 
+    /**
+     * @param  string $isbn
+     * @return array
+     */
     public function getBookLink(string $isbn): array
     {
         $url = self::BASE_API_URL;
@@ -25,7 +31,9 @@ class OpenLibraryClient
 
         try {
             $response = $this->httpClient->request(
-                'GET', $url, [
+                'GET',
+                $url,
+                [
                 'query' => $queryParams,
                 ]
             );
@@ -46,5 +54,4 @@ class OpenLibraryClient
             throw new \RuntimeException("Erreur lors de la récupération des données : " . $e->getMessage());
         }
     }
-
 }

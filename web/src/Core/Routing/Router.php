@@ -6,14 +6,21 @@ use App\Core\View;
 
 class Router
 {
-
     private array $routes;
 
+    /**
+     * @param string $routingPath
+     */
     public function __construct(string $routingPath)
     {
         $this->routes = json_decode(file_get_contents($routingPath), true);
     }
 
+    /**
+     * @param  string $path
+     * @param  $params
+     * @return Route|null
+     */
     public function match(string $path, $params): ?Route
     {
         $matchingRoute = $this->routes[$path] ?? null;
@@ -25,7 +32,6 @@ class Router
                         $matchingRoute = $route;
                     }
                 }
-
             }
         }
         if (empty($matchingRoute)) {
@@ -40,6 +46,11 @@ class Router
         );
     }
 
+    /**
+     * @param  string $routeUri
+     * @param  string $requestUri
+     * @return array|null
+     */
     protected function matchRoute(string $routeUri, string $requestUri): ?array
     {
         $routeSegments = explode('/', trim($routeUri, '/'));
@@ -51,8 +62,7 @@ class Router
         foreach ($routeSegments as $index => $routeSegment) {
             if (str_starts_with($routeSegment, '{') && str_ends_with($routeSegment, '}')) {
                 $params[trim($routeSegment, '{}')] = $requestSegments[$index];
-            }
-            elseif ($routeSegment !== $requestSegments[$index]) {
+            } elseif ($routeSegment !== $requestSegments[$index]) {
                 return null;
             }
         }
@@ -60,6 +70,10 @@ class Router
         return $params;
     }
 
+    /**
+     * @return void
+     * @throws \Exception
+     */
     public static function notFound(): void
     {
         http_response_code(404);
@@ -86,5 +100,4 @@ class Router
         View::render('errors/500');
         exit;
     }
-
 }

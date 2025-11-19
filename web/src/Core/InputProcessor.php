@@ -1,8 +1,12 @@
 <?php
+
 namespace App\Core;
 
 class InputProcessor
 {
+    /**
+     * @return array
+     */
     public function processServerInput(): array
     {
         $input = match ($_SERVER['REQUEST_METHOD']) {
@@ -20,6 +24,10 @@ class InputProcessor
         return $input;
     }
 
+    /**
+     * @param  array $files
+     * @return array
+     */
     private function sanitizeFiles(array $files): array
     {
         $sanitizedFiles = [];
@@ -32,6 +40,10 @@ class InputProcessor
         return $sanitizedFiles;
     }
 
+    /**
+     * @param  array $file
+     * @return array
+     */
     private function sanitizeSingleFile(array $file): array
     {
         return [
@@ -43,6 +55,10 @@ class InputProcessor
         ];
     }
 
+    /**
+     * @param  array $file
+     * @return array
+     */
     private function normalizeMultipleFiles(array $file): array
     {
         $normalized = [];

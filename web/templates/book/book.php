@@ -16,15 +16,15 @@
       <strong>Catégories</strong>
       <ul>
           <?php if (isset($book['tags'])) : ?>
-                <?php foreach ($book['tags'] as $tag): ?>
+                <?php foreach ($book['tags'] as $tag) : ?>
               <li>
                     <?php if ($tag == 'PHP') : ?>
                     <strong><?php echo $tag ?></strong>
-                  <?php elseif ($tag == 'MySQL') : ?>
+                    <?php elseif ($tag == 'MySQL') : ?>
                     <em><?php echo $tag ?></em>
-                  <?php else: ?>
-                      <?php echo $tag ?>
-                  <?php endif; ?>
+                    <?php else : ?>
+                        <?php echo $tag ?>
+                    <?php endif; ?>
               </li>
                 <?php endforeach; ?>
           <?php endif; ?>

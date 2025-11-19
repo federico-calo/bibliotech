@@ -1,6 +1,6 @@
 <div class="p-3 row-first row bg-custom-primary">
   <div class="col col-md-5 col-12 mb-3"></div>
-    <?php foreach (['Auteur', 'Catégorie'] as $column_title): ?>
+    <?php foreach (['Auteur', 'Catégorie'] as $column_title) : ?>
       <div class="col col-md-3 col-12 mb-3">
           <?php echo $column_title ?>
       </div>
@@ -23,7 +23,7 @@
                 <li><a class="dropdown-item text-danger"
                        href="/admin/dashboard">Dashboard</a></li>
                 <?php endif; ?>
-            <?php else: ?>
+            <?php else : ?>
               <li><a class="dropdown-item text-danger" href="/user/login">Se
                   connecter</a></li>
             <?php endif; ?>
@@ -34,7 +34,7 @@
 </div>
 
 <?php if (isset($books)) : ?>
-    <?php foreach ($books as $book): ?>
+    <?php foreach ($books as $book) : ?>
     <div class="row ps-4 py-3">
       <div class="col col-md-5 col-12 mb-3 book-title">
         <i class="fa-solid fa-book"></i>
@@ -47,7 +47,7 @@
       </div>
       <div class="col col-md-3 col-12 mb-3 ps-0">
         <div class="tag-list">
-            <?php foreach ($book['tags'] as $tag): ?>
+            <?php foreach ($book['tags'] as $tag) : ?>
               <a href="/?tag=<?php echo $tag ?>">
                 <span class="tag-item">
                   <i class="fas fa-tag"></i>

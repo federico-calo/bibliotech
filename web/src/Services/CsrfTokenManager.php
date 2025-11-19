@@ -4,18 +4,20 @@ namespace App\Services;
 
 class CsrfTokenManager implements TokenManagerInterface
 {
-
     private const int LENGTH = 32;
 
     private const int DURATION = 180;
 
+    /**
+     * @return bool
+     */
     protected static function isExpired(): bool
     {
         return !isset($_SESSION['csrfToken']['expires']) || time() > $_SESSION['csrfToken']['expires'];
     }
 
     /**
-     * @throws \Random\RandomException
+     * @throws \Exception
      */
     public static function generateToken(): string
     {
@@ -29,7 +31,8 @@ class CsrfTokenManager implements TokenManagerInterface
     }
 
     /**
-     * @throws \Random\RandomException
+     * @return string
+     * @throws \Exception
      */
     public static function getToken(): string
     {
@@ -45,7 +48,7 @@ class CsrfTokenManager implements TokenManagerInterface
      * @param string $token
      *
      * @return bool
-     * @throws \Random\RandomException
+     * @throws \Exception
      */
     public static function validateToken(string $token): bool
     {
@@ -53,9 +56,11 @@ class CsrfTokenManager implements TokenManagerInterface
         if (in_array($method, ['GET', 'HEAD', 'OPTIONS'])) {
             return true;
         }
-        if (!empty($token) && !static::isExpired() && hash_equals(
-            $_SESSION['csrfToken']['token'] ?? '', $token
-        )
+        if (
+            !empty($token) && !static::isExpired() && hash_equals(
+                $_SESSION['csrfToken']['token'] ?? '',
+                $token
+            )
         ) {
             static::generateToken();
             return true;
@@ -63,5 +68,4 @@ class CsrfTokenManager implements TokenManagerInterface
 
         return false;
     }
-
 }

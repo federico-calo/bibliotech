@@ -6,7 +6,6 @@ use App\Enum\UserRole;
 
 class User
 {
-
     public function __construct(
         private ?int $id = null,
         private ?string $login = null,
@@ -15,26 +14,39 @@ class User
         private ?string $firstname = null,
         private ?string $lastname = null,
         private ?string $token = null,
-        private ?string $token_expires_at  = null,
+        private ?string $token_expires_at = null,
         private ?string $role = UserRole::DEFAULT->value
     ) {
     }
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getLogin(): string
     {
         return $this->login;
     }
 
+    /**
+     * @return string
+     */
     public function getMail(): string
     {
         return $this->mail;
     }
 
+    /**
+     * @param  string $mail
+     * @return void
+     */
     public function setMail(string $mail): void
     {
         if (!filter_var($mail, FILTER_VALIDATE_EMAIL)) {
@@ -44,7 +56,7 @@ class User
     }
 
     /**
-     * @return UserRole
+     * @return string
      */
     public function getRole(): string
     {
@@ -91,6 +103,4 @@ class User
     {
         return password_verify($password, (string) $this->password);
     }
-
-
 }

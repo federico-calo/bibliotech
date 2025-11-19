@@ -15,9 +15,17 @@ use App\Services\RedisHelper;
 
 class DashboardController
 {
-
+    /**
+     * @param AuthManager    $authManager
+     * @param BookRepository $bookRepository
+     * @param UserRepository $userRepository
+     * @param CsvExporter    $csvExporter
+     * @param CsvImporter    $csvImporter
+     * @param View           $view
+     * @param RedisHelper    $redisHelper
+     */
     public function __construct(
-        private AuthManager    $authManager,
+        private AuthManager $authManager,
         private BookRepository $bookRepository,
         private UserRepository $userRepository,
         private CsvExporter $csvExporter,
@@ -27,7 +35,7 @@ class DashboardController
     ) {
     }
 
-    const string TEMPLATE_NAME = 'admin/dashboard';
+    public const string TEMPLATE_NAME = 'admin/dashboard';
 
     /**
      * @throws \Exception
@@ -61,5 +69,4 @@ class DashboardController
             ]
         );
     }
-
 }

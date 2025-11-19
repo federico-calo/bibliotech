@@ -11,20 +11,25 @@ use App\Services\CsrfTokenManager;
 
 class BookController
 {
-
+    /**
+     * @param AuthManager           $authManager
+     * @param BookRepository        $bookRepository
+     * @param View                  $view
+     * @param CsrfTokenManager|null $csrfTokenManager
+     */
     public function __construct(
-        private AuthManager    $authManager,
+        private AuthManager $authManager,
         private BookRepository $bookRepository,
         private View $view,
         private ?CsrfTokenManager $csrfTokenManager
     ) {
     }
 
-    const string VIEW_TEMPLATE_NAME = 'book/book';
+    public const string VIEW_TEMPLATE_NAME = 'book/book';
 
-    const string EDIT_TEMPLATE_NAME = 'book/book-edit';
+    public const string EDIT_TEMPLATE_NAME = 'book/book-edit';
 
-    const string DELETE_TEMPLATE_NAME = 'book/book-delete';
+    public const string DELETE_TEMPLATE_NAME = 'book/book-delete';
 
     /**
      * @throws \Exception
@@ -122,5 +127,4 @@ class BookController
             ]
         );
     }
-
 }

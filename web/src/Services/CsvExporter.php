@@ -4,7 +4,11 @@ namespace App\Services;
 
 class CsvExporter
 {
-
+    /**
+     * @param  array  $data
+     * @param  string $filename
+     * @return void
+     */
     public static function export(array $data, string $filename): void
     {
         \header('Content-Type: text/csv');
@@ -20,5 +24,4 @@ class CsvExporter
         \fclose($output);
         exit;
     }
-
 }

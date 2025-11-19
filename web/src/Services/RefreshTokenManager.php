@@ -4,13 +4,16 @@ namespace App\Services;
 
 class RefreshTokenManager implements TokenManagerInterface
 {
-
+    /**
+     * @param \PDO        $pdo
+     * @param string|null $secretKey
+     */
     public function __construct(private \PDO $pdo, private ?string $secretKey = null)
     {
     }
 
     /**
-     * @throws \Random\RandomException
+     * @throws \Exception
      */
     public static function generateToken(): string
     {
@@ -18,7 +21,7 @@ class RefreshTokenManager implements TokenManagerInterface
     }
 
     /**
-     * @throws \Random\RandomException
+     * @throws \Exception
      */
     public function assignToken(int $userId): string
     {
@@ -47,7 +50,8 @@ class RefreshTokenManager implements TokenManagerInterface
         $stmt = $this->pdo->prepare('SELECT token, token_expires_at FROM users WHERE id = :id');
         $stmt->execute([':id' => $userId]);
         $user = $stmt->fetch(\PDO::FETCH_ASSOC);
-        if (!$user || !hash_equals($user['token'], $token)
+        if (
+            !$user || !hash_equals($user['token'], $token)
             || new \DateTime($user['token_expires_at']) < new \DateTime()
         ) {
             return false;
@@ -56,6 +60,11 @@ class RefreshTokenManager implements TokenManagerInterface
         return true;
     }
 
+    /**
+     * @param  string $token
+     * @param  int    $userId
+     * @return bool
+     */
     public function compareToken(string $token, int $userId): bool
     {
         $stmt = $this->pdo->prepare('SELECT token FROM users WHERE id = :id');
@@ -67,5 +76,4 @@ class RefreshTokenManager implements TokenManagerInterface
 
         return true;
     }
-
 }

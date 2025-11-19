@@ -9,7 +9,11 @@ use App\Services\JsonResponse;
 
 class ApiController
 {
-
+    /**
+     * @param AuthManager    $authManager
+     * @param BookRepository $bookRepository
+     * @param JsonResponse   $jsonResponse
+     */
     public function __construct(
         private AuthManager $authManager,
         private BookRepository $bookRepository,
@@ -17,6 +21,10 @@ class ApiController
     ) {
     }
 
+    /**
+     * @param  $params
+     * @return never
+     */
     public function apiGet($params): never
     {
         $id = $params['id'] ?? null;
@@ -24,6 +32,10 @@ class ApiController
         exit;
     }
 
+    /**
+     * @param  $params
+     * @return never
+     */
     public function apiGetAll($params): never
     {
         $page = isset($params['page']) && is_numeric($params['page']) ? (int)$params['page'] : 1;
@@ -45,8 +57,9 @@ class ApiController
     }
 
     /**
+     * @param  $params
+     * @return void
      * @throws \DateMalformedStringException
-     * @throws \Exception
      */
     public function apiPost($params): void
     {
@@ -61,23 +74,24 @@ class ApiController
         if ($this->bookRepository->insertBook($input)) {
             echo $this->jsonResponse->json(['message' => 'Book created'], 201);
             exit;
-        }
-        else {
+        } else {
             echo $this->jsonResponse->json(['error' => 'Invalid data'], 400);
             exit;
         }
     }
 
     /**
+     * @param  $params
+     * @return void
      * @throws \Random\RandomException
-     * @throws \Exception
      */
     public function apiToken($params)
     {
         $input = json_decode(file_get_contents('php://input'), true);
         if (empty($input['user_id'])) {
             echo $this->jsonResponse->json(
-                ['error' => 'Forbidden: Missing user_id parameter'], 403
+                ['error' => 'Forbidden: Missing user_id parameter'],
+                403
             );
             exit;
         }
@@ -99,9 +113,9 @@ class ApiController
             exit;
         }
         echo $this->jsonResponse->json(
-            ['error' => 'Unable to generate token'], 400
+            ['error' => 'Unable to generate token'],
+            400
         );
         exit;
     }
-
 }
