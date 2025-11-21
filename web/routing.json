@@ -79,6 +79,15 @@
       "App\\Services\\CsrfTokenManager"
     ]
   },
+  "/user/{id}/api-documentation": {
+    "controller": "UserController",
+    "action": "swagger",
+    "dependencies": [
+      "App\\Repository\\UserRepository",
+      "App\\Services\\CsrfTokenManager",
+      "App\\Services\\Openapi"
+    ]
+  },
   "/api/book/{id}": {
     "controller": "ApiController",
     "action": "apiGet",

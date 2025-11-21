@@ -1,4 +1,4 @@
-/* ==================== Variables globales ==================== */
+/* ==================== Variables ==================== */
 :root {
   --color-bg: #FEFEFE;
   --color-text: #555555;
@@ -95,7 +95,7 @@ pre {
   font-weight: bold;
 }
 
-/* ==================== Typographie ==================== */
+/* ==================== Typography ==================== */
 h1, h5 {
   margin: 0;
 }
@@ -146,7 +146,7 @@ a:hover {
   background-color: var(--color-primary-hover);
 }
 
-/* ==================== Icônes ==================== */
+/* ==================== Icons ==================== */
 .col .fa-book {
   font-size: 2.5rem;
   color: var(--color-primary);
@@ -156,7 +156,7 @@ a:hover {
   font-size: 2rem;
 }
 
-/* ==================== Couleurs personnalisées ==================== */
+/* ==================== Colors ==================== */
 .bg-custom-primary {
   background-color: var(--color-primary);
 }
@@ -165,7 +165,7 @@ a:hover {
   background-color: var(--color-secondary);
 }
 
-/* ==================== Grille & Colonnes ==================== */
+/* ==================== Grid and columns ==================== */
 .col {
   padding-top: 1rem;
   display: flex;
@@ -194,7 +194,7 @@ a:hover {
   color: #444;
 }
 
-/* ==================== En-tête (Header) ==================== */
+/* ==================== Header ==================== */
 header > .container {
   text-align: center;
   margin-bottom: -2.8rem;
@@ -219,7 +219,7 @@ header h1 {
   text-decoration: none;
 }
 
-/* ==================== Recherche ==================== */
+/* ==================== Search ==================== */
 .search {
   z-index: 10;
   position: relative;
@@ -276,7 +276,7 @@ header h1 {
   background-color: var(--color-secondary);
 }
 
-/* ==================== Boutons ==================== */
+/* ==================== Buttons ==================== */
 .btn-custom-primary,
 .btn-custom-secondary {
   border: none;
@@ -323,7 +323,7 @@ header h1 {
   margin-top: 30px;
 }
 
-/* ==================== Onglets ==================== */
+/* ==================== Tabs ==================== */
 .nav-tabs.custom-tabs .nav-link {
   color: var(--color-alter);
   background-color: var(--color-bg);
@@ -350,7 +350,7 @@ header h1 {
   border-bottom: 2px solid #D2957C;
 }
 
-/* ==================== Livres ==================== */
+/* ==================== Books ==================== */
 .book-full .fa-book {
   font-size: 4rem;
 }
@@ -393,7 +393,7 @@ header h1 {
   color: var(--color-bg);
 }
 
-/* ==================== Pied de page ==================== */
+/* ==================== Footer ==================== */
 .admin-actions {
   display: inline-block;
 }
@@ -409,6 +409,17 @@ footer {
 
 .footer-link {
   color: var(--color-footer-text);
+}
+
+/* ==================== Swagger ==================== */
+
+.swagger-ui .topbar,
+.swagger-ui .link {
+    display:none !important;
+}
+
+.swagger-ui .info .title small pre {
+    background: none;
 }
 
 /* ==================== Responsive (Media Queries) ==================== */

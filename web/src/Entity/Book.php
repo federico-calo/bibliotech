@@ -2,27 +2,38 @@
 
 namespace App\Entity;
 
+use OpenApi\Attributes as OA;
+
+#[OA\Schema(
+    schema: "Book",
+    description: "Book entity",
+    required: [],
+    type: "object"
+)]
 class Book
 {
-    /**
-     * @param int|null    $id
-     * @param string|null $title
-     * @param string|null $author
-     * @param string|null $isbn
-     * @param string|null $summary
-     * @param string|null $createdAt
-     * @param string|null $updatedAt
-     */
     public function __construct(
+        #[OA\Property(property: "id", description: "Unique ID of the book", type: "integer", example: 101, nullable: true)]
         private ?int $id = null,
+
+        #[OA\Property(property: "title", description: "Book title", type: "string", example: "Harry Potter")]
         private ?string $title = null,
+
+        #[OA\Property(property: "author", description: "Book author", type: "string", example: "J.K. Rowling")]
         private ?string $author = null,
+
+        #[OA\Property(property: "isbn", description: "ISBN identifier", type: "string", example: "978-2070612758", nullable: true)]
         private ?string $isbn = null,
+
+        #[OA\Property(property: "summary", description: "Short summary", type: "string", example: "A young wizard discovers his powers...", nullable: true)]
         private ?string $summary = null,
+
+        #[OA\Property(property: "createdAt", description: "Creation timestamp", type: "string", format: "date-time", example: "2025-02-01T12:45:00Z", nullable: true)]
         private ?string $createdAt = null,
-        private ?string $updatedAt = null
-    ) {
-    }
+
+        #[OA\Property(property: "updatedAt", description: "Update timestamp", type: "string", format: "date-time", example: "2025-02-11T17:30:00Z", nullable: true)]
+        private ?string $updatedAt = null,
+    ) {}
 
     /**
      * @param  string $name
@@ -101,3 +112,4 @@ class Book
         return get_object_vars($this);
     }
 }
+

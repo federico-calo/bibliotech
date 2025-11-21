@@ -225,7 +225,6 @@ class BookRepository implements BookRepositoryInterface
             foreach ($tags as $tag) {
                 $book['tags'][] = $tag->getName();
             }
-            $book['data'] = $this->openLibraryClient->getBookLink($book['isbn']);
             $this->redisHelper->set($cacheKey, $book);
         }
 

@@ -1,0 +1,319 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Bibliotech API",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/books/{id}": {
+            "get": {
+                "tags": [
+                    "Livre"
+                ],
+                "description": "Récupère les informations d’un livre par son ID unique.",
+                "operationId": "apiGet",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Identifiant du livre",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 12
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Détails du livre récupérés avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Book"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Livre non trouvé."
+                    }
+                }
+            }
+        },
+        "/api/books": {
+            "get": {
+                "tags": [
+                    "Livre"
+                ],
+                "description": "Récupère une liste paginée de livres avec filtres facultatifs.",
+                "operationId": "apiGetAll",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Numéro de page.",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "tag",
+                        "in": "query",
+                        "description": "Filtre les livres par tag.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "fantasy"
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Recherche texte sur auteur/titre/résumé.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Harry Potter"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Liste des livres récupérée avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/BooksPaginated"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Livre"
+                ],
+                "description": "Crée un livre (authentification par API Key requise).",
+                "operationId": "apiPost",
+                "parameters": [
+                    {
+                        "name": "Api_key",
+                        "in": "header",
+                        "description": "Clé API permettant d'autoriser la création.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "8f2c4c0a-3e65-47d2-8939-b3c9dcfd1ea7"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Données du livre à créer.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/BookInput"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Livre créé avec succès."
+                    },
+                    "400": {
+                        "description": "Données invalides."
+                    },
+                    "401": {
+                        "description": "Clé API invalide."
+                    }
+                }
+            }
+        },
+        "/api/token": {
+            "post": {
+                "tags": [
+                    "Authentification"
+                ],
+                "description": "Génère un nouveau token d'API suite à validation d'un précédent.",
+                "operationId": "apiToken",
+                "parameters": [
+                    {
+                        "name": "Api_key",
+                        "in": "header",
+                        "description": "Clé API actuelle à valider avant régénération.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Identifiant utilisateur pour lequel générer un nouveau token.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 42
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Nouveau token généré avec succès.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/TokenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Clé API invalide."
+                    },
+                    "403": {
+                        "description": "Paramètre manquant."
+                    },
+                    "400": {
+                        "description": "Impossible de générer un token."
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Book": {
+                "description": "Book entity",
+                "required": [],
+                "properties": {
+                    "id": {
+                        "description": "Unique ID of the book",
+                        "type": "integer",
+                        "example": 101,
+                        "nullable": true
+                    },
+                    "title": {
+                        "description": "Book title",
+                        "type": "string",
+                        "example": "Harry Potter"
+                    },
+                    "author": {
+                        "description": "Book author",
+                        "type": "string",
+                        "example": "J.K. Rowling"
+                    },
+                    "isbn": {
+                        "description": "ISBN identifier",
+                        "type": "string",
+                        "example": "978-2070612758",
+                        "nullable": true
+                    },
+                    "summary": {
+                        "description": "Short summary",
+                        "type": "string",
+                        "example": "A young wizard discovers his powers...",
+                        "nullable": true
+                    },
+                    "createdAt": {
+                        "description": "Creation timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-02-01T12:45:00Z",
+                        "nullable": true
+                    },
+                    "updatedAt": {
+                        "description": "Update timestamp",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-02-11T17:30:00Z",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "BooksPaginated": {
+                "properties": {
+                    "current_page": {
+                        "type": "integer"
+                    },
+                    "total_pages": {
+                        "type": "integer"
+                    },
+                    "total_books": {
+                        "type": "integer"
+                    },
+                    "books": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Book"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "BookInput": {
+                "required": [
+                    "title",
+                    "author"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "author": {
+                        "type": "string"
+                    },
+                    "isbn": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "summary": {
+                        "type": "string",
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "TokenResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Token generated successfully"
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "a12c9d8e-f31b-456a-b7cd-9e1e2d5904af"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Livre",
+            "description": "Livre"
+        },
+        {
+            "name": "Authentification",
+            "description": "Authentification"
+        }
+    ]
+}

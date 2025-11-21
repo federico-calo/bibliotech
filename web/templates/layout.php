@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
     <link rel="stylesheet" href="/assets/font/fontawesome/css/all.min.css">
+      <link rel="stylesheet" href="/assets/swagger/swagger-ui.css" />
   </head>
   <body>
     <header class="banner bg-custom-primary text-white text-center">

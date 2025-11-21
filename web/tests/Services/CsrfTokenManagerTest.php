@@ -74,3 +74,4 @@ class CsrfTokenManagerTest extends TestCase
         $this->assertTrue(CsrfTokenManager::validateToken(''));
     }
 }
+

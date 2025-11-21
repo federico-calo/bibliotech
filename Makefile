@@ -1,7 +1,7 @@
 SHELL := /bin/sh
 DC := docker compose
 
-.PHONY: init up down restart logs composer shell db-shell cache-shell phpunit phpstan rector lint
+.PHONY: init up down restart logs composer shell db-shell cache-shell phpunit phpstan rector lint npm yarn node-shell build watch
 
 init:
 	cp -n settings.php.dist settings.php || true
@@ -42,4 +42,16 @@ db-shell:
 
 cache-shell:
 	$(DC) exec cache redis-cli
+
+npm-%:
+	$(DC) exec node npm $*
+
+node-shell:
+	$(DC) exec node sh
+
+install-swagger:
+	@echo "🚀 Installing Swagger UI..."
+	$(DC) exec node npm install swagger-ui-dist
+	mkdir -p web/assets/swagger
+	cp -r node_modules/swagger-ui-dist/* web/assets/swagger/
 

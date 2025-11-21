@@ -9,6 +9,7 @@ use App\Core\View;
 use App\Enum\UserRole;
 use App\Repository\UserRepository;
 use App\Services\CsrfTokenManager;
+use App\Services\Openapi;
 
 class UserController
 {
@@ -20,17 +21,23 @@ class UserController
 
     public const string API_TEMPLATE_NAME = 'user/user-api';
 
+    public const string API_DOC_TEMPLATE_NAME = 'user/user-api-documentation';
+
+    public const string OPENAPI_CACHE_PATH = '/../../openapi.cache.json';
+
     /**
-     * @param AuthManager      $authManager
-     * @param UserRepository   $userRepository
-     * @param View             $view
+     * @param AuthManager $authManager
+     * @param UserRepository $userRepository
+     * @param View $view
      * @param CsrfTokenManager $csrfTokenManager
+     * @param Openapi $openapi
      */
     public function __construct(
         private AuthManager $authManager,
         private UserRepository $userRepository,
         private View $view,
         private CsrfTokenManager $csrfTokenManager,
+        private Openapi $openapi,
     ) {
     }
 
@@ -177,6 +184,99 @@ class UserController
             ]
         );
     }
+
+    /**
+     * @param $params
+     * @param $method
+     * @throws \Exception
+     */
+    public function openapi($params, $method): void
+    {
+        $templatePath = Settings::getTemplatePath(self::API_DOC_TEMPLATE_NAME);
+        if (!\file_exists($templatePath)) {
+            throw new \Exception("Template non trouvé : " . $templatePath);
+        }
+        $currentUser = $this->userRepository->currentUser();
+        if (empty($currentUser) || ($currentUser['role'] != UserRole::ADMIN->value && $currentUser['id'] != $params['id'])) {
+            Router::accessDenied();
+        }
+
+        $id = $params['id'] ?? null;
+        if ($params !== null && $method == 'POST') {
+            $token = $params['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+            if (!empty($id)) {
+                if (!$this->csrfTokenManager->validateToken((string) $token)) {
+                    Router::accessDenied();
+                }
+                try {
+                    $manager = $this->authManager->getRefreshTokenManager(Settings::get('hashKey'));
+                    $manager->assignToken($currentUser['id']);
+                } catch (\Exception $e) {
+                    echo 'Erreur : ' . $e->getMessage();
+                }
+            }
+        }
+        $cacheFile = __DIR__ . self::OPENAPI_CACHE_PATH;
+        if (file_exists($cacheFile)) {
+            $openApiJson = file_get_contents($cacheFile);
+        }
+        else {
+            $openApiJson = $this->openapi->generate([__DIR__ . '../Entity', __DIR__]);
+            file_put_contents($cacheFile, $openApiJson);
+        }
+        header('Content-Type: application/json');
+        echo $openApiJson;
+    }
+
+    /**
+     * @param $params
+     * @param $method
+     * @throws \Exception
+     */
+    public function swagger($params, $method): void
+    {
+        $templatePath = Settings::getTemplatePath(self::API_DOC_TEMPLATE_NAME);
+        if (!\file_exists($templatePath)) {
+            throw new \Exception("Template non trouvé : " . $templatePath);
+        }
+        $currentUser = $this->userRepository->currentUser();
+        if (empty($currentUser) || ($currentUser['role'] != UserRole::ADMIN->value && $currentUser['id'] != $params['id'])) {
+            Router::accessDenied();
+        }
+        $id = $params['id'] ?? null;
+        if ($params !== null && $method == 'POST') {
+            $token = $params['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? '';
+            if (!empty($id)) {
+                if (!$this->csrfTokenManager->validateToken((string) $token)) {
+                    Router::accessDenied();
+                }
+                try {
+                    $manager = $this->authManager->getRefreshTokenManager(Settings::get('hashKey'));
+                    $manager->assignToken($currentUser['id']);
+                } catch (\Exception $e) {
+                    echo 'Erreur : ' . $e->getMessage();
+                }
+            }
+        }
+        $cacheFile = __DIR__ . self::OPENAPI_CACHE_PATH;
+        //if (!file_exists($cacheFile)) {
+            $openApiJson = $this->openapi->generate([__DIR__ . '/../Entity', __DIR__ . '/../Services', __DIR__]);
+            file_put_contents($cacheFile, $openApiJson);
+        //}
+        View::render(
+            $templatePath,
+            [
+                'isAdmin' => $this->authManager->isAdmin(),
+                'isLoggedIn' => $this->authManager->isLoggedIn(),
+                'user' => $currentUser,
+                'csrfToken' => $this->csrfTokenManager->getToken(),
+                'userEditUrl' =>  '/user/' . $id . '/edit',
+                'userApiUrl' =>  '/user/' . $id . '/api',
+                'activeTab' => 'api'
+            ]
+        );
+    }
+
 
     /**
      * @return void

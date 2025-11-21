@@ -48,12 +48,19 @@ class ClassResolver
         $parameters = $constructor->getParameters();
         $dependencies = [];
         foreach ($parameters as $parameter) {
-            $type = $parameter->getType();
-
-            if ($type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
-                $dependencyClassName = $type->getName();
-                $dependencies[] = $this->resolveClass($dependencyClassName);
+            if ($parameter->isDefaultValueAvailable()) {
+                $dependencies[] = $parameter->getDefaultValue();
+                continue;
             }
+            $type = $parameter->getType();
+            if (!$type instanceof \ReflectionNamedType || $type->isBuiltin()) {
+                throw new \Exception(
+                    "Impossible de résoudre le paramètre \${$parameter->getName()} de {$className}"
+                );
+            }
+
+            $dependencyClassName = $type->getName();
+            $dependencies[] = $this->resolveClass($dependencyClassName);
         }
 
         return $reflectionClass->newInstanceArgs($dependencies);
